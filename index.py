@@ -48,19 +48,37 @@ class MainWindow(qtw.QWidget):
             logsRawLoc = gb.glob(mcdir + '*.gz')
             logs = []
             for item in logsRawLoc:
-                returned = mcdir
-                returned.replace("\\", "/")
+                item.replace("\\", "/")
+                logs.append(item)
+
 
             class MainGui(qtw.QWidget):
                 
                 def __init__(self):
                     super().__init__()
                     layout = qtw.QGridLayout()
-                    self.label = qtw.QLabel("Another Window")
-                    layout.addWidget(self.label)
                     self.setLayout(layout)
                     self.setFixedSize(500,500)
-                                                                
+
+                    self.list = qtw.QListWidget()
+                    def open(self):
+                        print(":C")
+                    if(logs):
+                        self.list.addItems(logs)
+                        self.list.doubleClicked.connect(self.open)
+                        self.layout().addWidget(self.list)
+
+                    else:
+                        self.list.addItem("There are no logs to parse")
+                        self.layout().addWidget(self.list)
+
+
+                def open(self):
+                    print(self.list.currentItem().text())
+                    os.startfile(f'{self.list.currentItem().text()}')
+
+                    
+
 
             self.w = MainGui()
             self.w.show()
